@@ -46,34 +46,63 @@ namespace Attendance_System
 
         private void ClockIN_button_Click(object sender, EventArgs e)
         {
-
-            OracleConnection connection = new OracleConnection("User Id=sa;Password=masterpassword;Data Source=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB");
-            OracleDataAdapter sda = new OracleDataAdapter("select count(*) from sa.\"Emp_Pro_table\" where EMPLOYEE_ID='" + Employee_ID_BOX.Text + "' and PIN = '" + PIN_BOX.Text + "' ", connection);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-
-            if (dt.Rows[0][0].ToString() == "1")
+            if (Employee_ID_BOX.Text == "")
             {
-                connection.Open();
-                string cmdText = @"INSERT INTO Emp_time_sheet (EMPLOYEE_ID)" + "VALUES (?)";
-                OracleCommand cmd = new OracleCommand(cmdText, connection);
-                cmd.Parameters.AddWithValue ("@EMPLOYEE_ID", Employee_ID_BOX.Text) ;
-                cmd.ExecuteNonQuery();
-                if (MessageBox.Show(string.Format(Time_Format, DateTime.Now), "Clock In",
-                        MessageBoxButtons.OK) == DialogResult.OK)
+                MessageBox.Show("please enter Employee ID ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+                    if (PIN_BOX.Text == "")
+            {
+                MessageBox.Show("please enter PIN ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+
+                       if (Employee_ID_BOX.Text == "" && PIN_BOX.Text == "")
+            {
+                MessageBox.Show("please enter Employee ID and PIN ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+            {
+                OracleConnection connection = new OracleConnection("User Id=sa;Password=masterpassword;Data Source=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB");
+                OracleDataAdapter sda = new OracleDataAdapter("select count(*) from sa.\"Emp_Pro_table\" where EMPLOYEE_ID='" + Employee_ID_BOX.Text + "' and PIN = '" + PIN_BOX.Text + "' ", connection);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+
+                if (dt.Rows[0][0].ToString() == "1")
                 {
+                   
+                    string y = string.Format(Time_Format, DateTime.Now);
+                    int x = Int32.Parse(Employee_ID_BOX.Text);
+                    string query = "INSERT INTO sa.\"Emp_time_sheet\" (EMPLOYEE_ID, CLOCK_IN) VALUES ('" + x +"','" + y + "')";
+                    OracleCommand clockin_cmd = new OracleCommand(query, connection);
+                    connection.Open();
+                    clockin_cmd.ExecuteNonQuery();
+                    connection.Close();
+                    
+
+                    if (MessageBox.Show(string.Format(Time_Format, DateTime.Now), "Clock In",
+                            MessageBoxButtons.OK) == DialogResult.OK)
+                    {
+                        Employee_ID_BOX.Text = "";
+                        PIN_BOX.Text = "";
+                    }
+
+
+
+
+                }
+                else
+                {
+                    MessageBox.Show("please enter correct Employee ID and PIN", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Employee_ID_BOX.Text = "";
                     PIN_BOX.Text = "";
                 }
-
-
-
-
-            }
-            else { 
-                MessageBox.Show("please enter correct Employee ID and PIN", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Employee_ID_BOX.Text = "";
-                PIN_BOX.Text = "";
             }
         }
 
@@ -93,29 +122,59 @@ namespace Attendance_System
 
         private void Clockout_button_Click(object sender, EventArgs e)
         {
-            OracleConnection connection = new OracleConnection("User Id=sa;Password=masterpassword;Data Source=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB");
-            OracleDataAdapter sda = new OracleDataAdapter("select count(*) from sa.\"Emp_Pro_table\" where EMPLOYEE_ID='" + Employee_ID_BOX.Text + "' and PIN = '" + PIN_BOX.Text + "' ", connection);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-
-            if (dt.Rows[0][0].ToString() == "1")
+            if (Employee_ID_BOX.Text == "")
             {
-                
+                MessageBox.Show("please enter Employee ID ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+                    if (PIN_BOX.Text == "")
+            {
+                MessageBox.Show("please enter PIN ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+
+                       if (Employee_ID_BOX.Text == "" && PIN_BOX.Text == "")
+            {
+                MessageBox.Show("please enter Employee ID and PIN ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+            {
+                OracleConnection connection = new OracleConnection("User Id=sa;Password=masterpassword;Data Source=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB");
+                OracleDataAdapter sda = new OracleDataAdapter("select count(*) from sa.\"Emp_Pro_table\" where EMPLOYEE_ID='" + Employee_ID_BOX.Text + "' and PIN = '" + PIN_BOX.Text + "' ", connection);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+
+                if (dt.Rows[0][0].ToString() == "1")
+                {
+                    string y = string.Format(Time_Format, DateTime.Now);
+                    int x = Int32.Parse(Employee_ID_BOX.Text);
+                    string query = "INSERT INTO sa.\"Emp_time_sheet\" (EMPLOYEE_ID, CLOCK_OUT) VALUES ('" + x + "','" + y + "')";
+                    OracleCommand clockin_cmd = new OracleCommand(query, connection);
+                    connection.Open();
+                    clockin_cmd.ExecuteNonQuery();
+                    connection.Close();
+
                     if (MessageBox.Show(string.Format(Time_Format, DateTime.Now), "Clock OUT",
                         MessageBoxButtons.OK) == DialogResult.OK)
                     {
                         Employee_ID_BOX.Text = "";
                         PIN_BOX.Text = "";
                     }
-                
-            }
-            else
-            {
-                MessageBox.Show("please enter correct Employee ID and PIN", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Employee_ID_BOX.Text = "";
-                PIN_BOX.Text = "";
-            }
 
+                }
+                else
+                {
+                    MessageBox.Show("please enter correct Employee ID and PIN", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Employee_ID_BOX.Text = "";
+                    PIN_BOX.Text = "";
+                }
+            }
         }
 
 
@@ -142,7 +201,30 @@ namespace Attendance_System
                 }
             }
 
-            private void LogIN_button_Click(object sender, EventArgs e)
+        private void LogIN_button_Click(object sender, EventArgs e)
+        {
+            if (Employee_ID_BOX.Text == "")
+            {
+                MessageBox.Show("please enter Employee ID ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+                     if (PIN_BOX.Text == "")
+            {
+                MessageBox.Show("please enter PIN ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
+
+                        if (Employee_ID_BOX.Text == "" && PIN_BOX.Text == "")
+            {
+                MessageBox.Show("please enter Employee ID and PIN ", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Employee_ID_BOX.Text = "";
+                PIN_BOX.Text = "";
+            }
+            else
             {
                 OracleConnection connection = new OracleConnection("User Id=sa;Password=masterpassword;Data Source=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB");
                 OracleDataAdapter sda = new OracleDataAdapter("select count(*) from sa.\"Emp_Pro_table\" where EMPLOYEE_ID='" + Employee_ID_BOX.Text + "' and PIN = '" + PIN_BOX.Text + "' ", connection);
@@ -151,20 +233,22 @@ namespace Attendance_System
 
                 if (dt.Rows[0][0].ToString() == "1")
                 {
-                    
-                        this.Hide();
-                        LOG_IN login_form = new LOG_IN();
-                        login_form.ShowDialog();
 
-                Employee_ID_BOX.Text = "";
-                PIN_BOX.Text = "";
-                
+                    this.Hide();
+                    LOG_IN login_form = new LOG_IN();
+                    login_form.ShowDialog();
+
+                    Employee_ID_BOX.Text = "";
+                    PIN_BOX.Text = "";
+
                 }
                 else
                     MessageBox.Show("please enter correct Employee ID and PIN", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Employee_ID_BOX.Text = "";
+                Employee_ID_BOX.Text = "";
                 PIN_BOX.Text = "";
             }
+        }
+
         }
 
 

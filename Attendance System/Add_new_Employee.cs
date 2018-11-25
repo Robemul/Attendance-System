@@ -48,7 +48,9 @@ namespace Attendance_System
 
         private void add_new_emp_cancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
+            Attendace login_form = new Attendace();
+            login_form.ShowDialog();
         }
 
         private void Add_new_Employee_Load(object sender, EventArgs e)
@@ -58,47 +60,47 @@ namespace Attendance_System
 
         private void Add_EMP_submit_btn_Click(object sender, EventArgs e)
         {
+            OracleConnection connection = new OracleConnection("User Id=sa;Password=masterpassword;Data Source=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB");
+            string F_name = First_name_txt.Text;
+            string M_name = Middle_name_txt.Text;
+            string L_name = Last_name_txt.Text;
+            string P_1 = pin_txtbox.Text;
+            string P_2 = confirm_pin_txtbox.Text;
+            int Emp_id = Int32.Parse(Employee_ID_txt_add.Text);
 
-            con = new OracleConnection(@"DATA SOURCE=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB:/;PERSIST SECURITY INFO=True;USER ID=SA;Password=masterpassword");
-            con.Open();
-            cmd = new OracleCommand("INSERT INTO Emp_time_sheet (FIRST_NAME, MIDDLE_NAME,LAST_NAME, EMPLOYEE_ID, SSN, SEX, DOB,HIREDATE, PIN) " +
-                   "VALUES (@FIRST_NAME, @MIDDLE_NAME,@LAST_NAME,@EMPLOYEE_ID,@SSN,@SEX,@DOB,@HIREDATE,@PIN)", con);
-            cmd.Parameters.Add("@FIRST_NAME", First_name_txt.Text);
-            cmd.Parameters.Add("@MIDDLE_NAME", Middle_name_txt.Text);
-            cmd.Parameters.Add("@LAST_NAME", Last_name_txt.Text);
-            cmd.Parameters.Add("@EMPLOYEE_ID", Employee_ID_txt_add.Text);
-            cmd.Parameters.Add("@SSN", SSN_txt_add.Text);
+            if (First_name_txt.Text != "" && Last_name_txt.Text != "" && Employee_ID_txt_add.Text != "")
+            {
+                if (P_1 == P_2)
+                {
+                    string query = "INSERT INTO sa.\"Emp_Pro_table\" (FIRST_NAME,MIDDLE_NAME,LAST_NAME,PIN,EMPLOYEE_ID ) VALUES ('" + F_name + "','" + M_name + "','" + L_name
+                    + "','" + P_1 + "','" + Emp_id + "')";
+                    OracleCommand addemp_cmd = new OracleCommand(query, connection);
+                    connection.Open();
+                    addemp_cmd.ExecuteNonQuery();
+                    connection.Close();
 
-            cmd.Parameters.Add("@DOB", DOB_txt_add.Text);
-            cmd.Parameters.Add("@HIREDATE", Hire_date_txt.Text);
-            cmd.Parameters.Add("@PIN", pin_txtbox.Text);
-
-            cmd.ExecuteNonQueryAsync();
-
-
-
+                    MessageBox.Show("New Employee have been submited", "alert", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    this.Hide();
+                    Attendace login_form = new Attendace();
+                    login_form.ShowDialog();
+                }
 
 
-            /*  
-              con = new SqlConnection(@"DATA SOURCE=orainst1.cisclfdiuyna.us-east-2.rds.amazonaws.com:1521/ORADB:/;PERSIST SECURITY INFO=True");
-              con.Open();
-              cmd = new SqlCommand("INSERT INTO Emp_time_sheet (FIRST_NAME, MIDDLE_NAME,LAST_NAME, EMPLOYEE_ID, SSN, SEX, DOB,HIREDATE, PIN) " +
-                  "VALUES (@FIRST_NAME, @MIDDLE_NAME,@LAST_NAME,@EMPLOYEE_ID,@SSN,@SEX,@DOB,@HIREDATE,@PIN)",con);
+                else
+                {
+                    MessageBox.Show("PIN does not match", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    pin_txtbox.Text = "";
+                    Confirm_Pin.Text = "";
+                }
 
-              cmd.Parameters.Add("@FIRST_NAME", First_name_txt.Text);
-              cmd.Parameters.Add("@MIDDLE_NAME", Middle_name_txt.Text);
-              cmd.Parameters.Add("@LAST_NAME", Last_name_txt.Text);
-              cmd.Parameters.Add("@EMPLOYEE_ID", Employee_ID_txt_add.Text);
-              cmd.Parameters.Add("@SSN", SSN_txt_add.Text);
-              cmd.Parameters.Add("@SEX", Male_radio_btn_add.Checked.ToString());
-              cmd.Parameters.Add("@DOB", DOB_txt_add.Text);
-              cmd.Parameters.Add("@HIREDATE", Hire_date_txt.Text);
-              cmd.Parameters.Add("@PIN", pin_txtbox.Text);
-              cmd.ExecuteNonQuery();
-              */
+            }
+        
+            else
+            {
+                MessageBox.Show("please complete the form correctly", "alert", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+            }
         }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 

@@ -19,17 +19,14 @@ namespace Attendance_System
 
         private void Exit_Login_btn_Click(object sender, EventArgs e)
         {
-           this.Close();
-         }
-
-       
-        private void report_btn_Click(object sender, EventArgs e)
-        {
             this.Hide();
-            Reports Report_form = new Reports();
-            Report_form.ShowDialog();
+            Attendace login_form = new Attendace();
+            login_form.ShowDialog();
+
         }
 
+       
+      
         private void Add_emp_btn_Click(object sender, EventArgs e)
         {
             this.Hide();
