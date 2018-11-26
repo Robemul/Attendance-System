@@ -31,11 +31,7 @@ namespace Attendance_System
         OracleConnection con;
         OracleDataAdapter da;
 
-        /*
-        SqlCommand cmd;
-        SqlConnection con;
-        SqlDataAdapter da;
-        */
+        
         public Add_new_Employee()
         {
             InitializeComponent();
@@ -66,6 +62,7 @@ namespace Attendance_System
             string L_name = Last_name_txt.Text;
             string P_1 = pin_txtbox.Text;
             string P_2 = confirm_pin_txtbox.Text;
+            
             int Emp_id = Int32.Parse(Employee_ID_txt_add.Text);
 
             if (First_name_txt.Text != "" && Last_name_txt.Text != "" && Employee_ID_txt_add.Text != "")
@@ -114,10 +111,15 @@ namespace Attendance_System
         private void Employee_ID_txt_add_KeyPress(object sender, KeyPressEventArgs e)
         {
             char ch = e.KeyChar;
-            if (!char.IsDigit(ch) && ch != 7 && ch != 0)
+            if (!char.IsDigit(ch) && ch != 8 && ch != 46)
             {
                 e.Handled = true;
             }
+        }
+
+        private void Employee_ID_txt_add_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

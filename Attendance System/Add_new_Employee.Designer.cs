@@ -95,6 +95,7 @@
             this.Employee_ID_txt_add.Name = "Employee_ID_txt_add";
             this.Employee_ID_txt_add.Size = new System.Drawing.Size(209, 22);
             this.Employee_ID_txt_add.TabIndex = 1;
+            this.Employee_ID_txt_add.TextChanged += new System.EventHandler(this.Employee_ID_txt_add_TextChanged);
             // 
             // First_name_lable
             // 
